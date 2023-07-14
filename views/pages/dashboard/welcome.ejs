@@ -1,0 +1,35 @@
+<app id="welcome">
+  <grid container spacing="2">
+    <grid item>
+      <switch-button
+      :value-var="modal"
+      :value-var.sync="modal"
+      name="teste"
+      >
+      </switch-button>
+    </grid>
+    <grid item sm="12" md="6" lg="12">
+      <chart
+        :labels="['eu', 'ia', 'lhe','chamar']"
+        :data="[5,25,10,40]"
+      ></chart>
+    </grid>
+    <grid item sm="12" md="12" lg="6">
+        <card title="Teste card">
+          testando Card ok
+        </card>
+    </grid>
+    <grid item sm="12" md="12" lg="6">
+        <card title="Teste card">
+          testando Card ok
+        </card>
+    </grid>
+  </grid>
+  <modal :open="modal" title="Teste Modal">
+    estou testando esse modal
+  </modal>
+  <toast :active="modal" color="primary" :active.sync="modal"> 
+    Testando
+  </toast> 
+</app>
+<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

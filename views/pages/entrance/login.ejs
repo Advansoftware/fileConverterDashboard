@@ -1,0 +1,50 @@
+<div id="login" v-cloak class="secondary-container">
+  <!-- <img src="/images/background.png" class="medium-elevate"
+    style="position: fixed; z-index: 0; width: 100%; top:0;bottom: 0;right: 0;left: 0;"> -->
+  <main class="responsive">
+    <div class="no-scroll middle-align center-align" style="height: 97vh!important;">
+      <div class="blur round grid large-space">
+        <div class="s12 m6 l6">
+          <div class="medium-space"></div>
+<!--           <h4 class="m l center-align">Monitor</h4> -->
+          <div class="middle-align center-align">
+            <img class="responsive" src="/images/logo.png" style="width: 150px;border-radius: none !important;">
+          </div>
+        </div>
+        <div class="s12 m6 l6">
+          <div class="middle-align center-align padding">
+            <div class="responsive">
+
+              <h6 class="center-align">Entrar</h6>
+              <p>Entre para monitorar nossas plataformas</p>
+              <div class="space"></div>
+
+              <ajax-form action="login" :syncing.sync="syncing" :cloud-error.sync="cloudError" :form-data="formData"
+                :form-rules="formRules" :form-errors.sync="formErrors" @submitted="submittedForm()">
+
+                <text-field name="emailAddress" label="Email" type="email"
+                  label-error="Por favor, digite um email valido." :form-data="formData" :form-errors="formErrors"
+                  autocomplete="email" focus-first>
+                </text-field>
+
+                <text-field name="password" label="Senha" type="password" label-error="Por farvor, digite a senha."
+                  :form-data="formData" :form-errors="formErrors" autocomplete="current-password">
+                </text-field>
+
+                <nav>
+                  <ajax-button :syncing="syncing" class="responsive">
+                    Entrar
+                  </ajax-button>
+                </nav>
+              </ajax-form>
+
+            </div>
+          </div>
+        </div>
+        <div class="s medium-space"></div>
+      </div>
+    </div>
+  </main>
+  <cloud-error :error="cloudError" :update-cloud-error.sync="cloudError">Email ou senha invalidos</cloud-error>
+</div>
+<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>
