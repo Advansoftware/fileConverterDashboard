@@ -29,7 +29,7 @@ module.exports = {
       throw {redirect:'/welcome'};
     }
 
-    return {};;
+    return {};
 
   }
 

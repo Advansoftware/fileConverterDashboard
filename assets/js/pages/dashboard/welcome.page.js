@@ -15,13 +15,19 @@ parasails.registerPage('welcome', {
   },
   mounted: async function() {
     //…
-    
+    /* io.socket.get('/api/v1/ffproble', function responseFromServer (body) {
+      console.log(body);
+    }); */
+    await Cloud.on('ffproble', (msg) => {
+      console.log('conversion: ' + msg);
+      io.emit('conversion', msg);
+    });
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    
+
   }
 });
