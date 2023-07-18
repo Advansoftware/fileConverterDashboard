@@ -37,7 +37,10 @@ module.exports = {
       type: 'string',
       description: 'The confirmation status of the user\'s email address.',
     },
-
+    thumbnail: {
+      type: 'string',
+      description: 'A still-unconfirmed email address that this user wants to change to (if relevant).'
+    },
     progress: {
       type: 'string',
       description: 'A still-unconfirmed email address that this user wants to change to (if relevant).'

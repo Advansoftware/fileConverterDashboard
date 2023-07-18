@@ -34,16 +34,18 @@ module.exports = {
     let output = './S01E01.mp4';
     var secret = this.req.param('secret');
     try {
+
+      let thumbnail = await sails.helpers.generateThumbnail.with({
+        videoPath: name,
+      });
+
      let item =  await FileStatus.findOrCreate({ name: name }, { 
         name,
         status: 0,
         progress: 0,
+        thumbnail,
       });
-     let teste = await sails.helpers.generateThumbnail.with({
-        videoPath: item.name,
-      });
-      sails.log('teste',teste)
-      return;
+      let getThumb = await fs.readFileSync(item.thumbnail, 'base64');
       let roomName = `conversion`;
       sails.sockets.join(this.req, roomName);
       let pr = item;
@@ -54,7 +56,8 @@ module.exports = {
           .set({
             status: 1,
             newName: output,
-            progress: 100
+            progress: 100,
+            thumbnail: ''
           });
           console.log(pr);
         }).on('error', async(err) => {
@@ -66,25 +69,19 @@ module.exports = {
           console.log('errr', err);
         }).on('progress',async (progress) => {
           total = progress.percent ? progress.percent.toFixed(2) : 0;
-           pr = await FileStatus.updateOne({ name: item.name })
-          .set({
-            progress: total
-          });
+          pr = await FileStatus.updateOne({ name: item.name })
+          .set({progress: total});
+
           FileStatus.publish([pr.id], {
             progress: pr.progress,
+            thumbnail:getThumb,
             theSecret: secret,
           });
         }).run();
-        
-        
+
         FileStatus.subscribe(this.req,[pr.id]);
-        
     }
-    return exits.success('start conversion');
-    return;
-      
-      
-      return exits.success('start conversion');
+
       /* let data = [];
       fs.readdir('../Animes/Dragon Ball Z/Season 01/', (err, files) => {
         if (err) {

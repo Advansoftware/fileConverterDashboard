@@ -8,6 +8,10 @@
       >
       </switch-button>
     </grid>
+    <grid item sm="12" md="12" lg="6">
+      <card-progress :value="progressConversion" :thumbnail="thumbnail"></card-progress>
+    </grid>
+      
     <grid item sm="12" md="6" lg="12">
       <chart
         :labels="['eu', 'ia', 'lhe','chamar']"
@@ -31,8 +35,7 @@
   <toast :active="modal" color="primary" :active.sync="modal">
     Testando
   </toast>
-
-    <card-progress :value="progressConversion"></card-progress>
+  
 
 </app>
 <%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

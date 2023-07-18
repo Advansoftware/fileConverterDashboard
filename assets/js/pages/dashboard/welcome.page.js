@@ -6,7 +6,8 @@ parasails.registerPage('welcome', {
     modal: '',
     pageLoadedAt: Date.now(),
     progressConversion: 0,
-    progress: 0
+    progress: 0,
+    thumbnail: '',
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -22,6 +23,7 @@ parasails.registerPage('welcome', {
     await Cloud.on('filestatus', (msg) => {
       this.progressConversion = (msg.progress/100).toFixed(3);
       this.progress = (this.progressConversion.substr(2)/10).toFixed(2)
+      this.thumbnail = 'data:image/png;base64,'+msg.thumbnail;
     });
   },
 
