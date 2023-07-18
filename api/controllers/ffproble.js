@@ -66,11 +66,12 @@ module.exports = {
     console.error('Error: ' + err.message);
   }).on('progress', (progress) => {
     // log the progress percentage
-
-    let roomName = `conversion${_.deburr(this.req.sessionID)}`;
-    sails.sockets.join(this.req, roomName);
     let progresstotal = progress.percent.toFixed(2);
-    sails.sockets.broadcast(roomName, {porcent: progresstotal});
+    console.log(progresstotal);
+    /*  let roomName = `conversion${_.deburr(this.req.sessionID)}`;
+    sails.sockets.join(this.req, roomName);
+
+    sails.sockets.broadcast(roomName, {porcent: progresstotal}); */
   })
   // run the process
   .run();
