@@ -44,37 +44,28 @@ module.exports = {
           }
         });
       }); */
-      const ffmpeg = require('fluent-ffmpeg');
-
+      await corvertAviToMp4();
 
       // make sure you set the correct path to your input and output files
-      let input = '../Animes/Dragon Ball Z/Season 01/S01E01.avi';
-      let output = '../Animes/Dragon Ball Z/Season 01/S01E01.mp4';
 
-      // create a new ffmpeg process
-      let proc = await ffmpeg(input)
-  // set the output format to mp4
-  .format('mp4')
-  // set the output file name
-  .output(output)
-  // handle events
-  .on('end', () => {
-    console.log('Conversion done');
-    return exits.success('Conversion done');
-  })
-  .on('error', (err) => {
-    console.error('Error: ' + err.message);
-  }).on('progress', (progress) => {
-    // log the progress percentage
-    let progresstotal = progress.percent.toFixed(2);
-    console.log(progresstotal);
-    /*  let roomName = `conversion${_.deburr(this.req.sessionID)}`;
-    sails.sockets.join(this.req, roomName);
+      function corvertAviToMp4 (){
+        let input = '../Animes/Dragon Ball Z/Season 01/S01E01.avi';
+        let output = '../Animes/Dragon Ball Z/Season 01/S01E01.mp4';
+        sails.log('entrou');
+        return new Promise((resolve,reject)=>{
+          ffmpeg(input).format('mp4').output(output).on('end', () => {
+            return resolve();
+          }).on('error', (err) => {
+            return reject(err);
+          }).on('progress', (progress) => {
+            sails.log(progress.percent.toFixed(2));
+            /*  let roomName = `conversion${_.deburr(this.req.sessionID)}`;
+        sails.sockets.join(this.req, roomName);
 
-    sails.sockets.broadcast(roomName, {porcent: progresstotal}); */
-  })
-  // run the process
-  .run();
+        sails.sockets.broadcast(roomName, {porcent: progresstotal}); */
+          });
+        });
+      }
       return exits.success('start conversion');
     } catch (err) {
       console.error(err);
