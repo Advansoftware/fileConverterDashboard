@@ -37,7 +37,7 @@ parasails.registerComponent('navbar', {
       <button class="transparent circle large" @click="showExpandedMenu()">
         <i>menu</i>
       </button>
-      <img :src="[theme==='light'? '/images/monitor.png':'/images/monitor.png']" style="width: 60px">
+      
       <div class="max"></div>
       <button class="transparent circle" @click="setTheme()">
         <i class="page top" :class="[theme==='light'? 'active': '']">dark_mode</i>

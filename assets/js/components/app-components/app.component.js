@@ -58,7 +58,7 @@ parasails.registerComponent('app', {
             <i>menu</i>
           </button>
           <a>
-          <img :src="[theme==='light'? '/images/monitor.png':'/images/monitor.png']" style="width: 60px">
+          
           </a>
         </nav>
       </header>

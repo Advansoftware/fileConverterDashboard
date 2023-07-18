@@ -12,7 +12,7 @@ module.exports = {
 
 
   inputs: {
-
+    
   },
 
 
@@ -30,7 +30,60 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
+    let name = './S01E01.avi';
+    let output = './S01E01.mp4';
+    var secret = this.req.param('secret');
     try {
+     let item =  await FileStatus.findOrCreate({ name: name }, { 
+        name,
+        status: 0,
+        progress: 0,
+      });
+      await sails.helpers.generateThumbnail.with({
+        videoPath: item.name,
+      });
+      return;
+      let roomName = `conversion`;
+      sails.sockets.join(this.req, roomName);
+      let pr = item;
+      if(item) {
+        
+        ffmpeg(item.name).format('mp4').output(output).on('end', async() => {
+          pr = await FileStatus.updateOne({ name: item.name })
+          .set({
+            status: 1,
+            newName: output,
+            progress: 100
+          });
+          console.log(pr);
+        }).on('error', async(err) => {
+           pr = await FileStatus.updateOne({ name: item.name })
+          .set({
+            status: 2,
+            errorMenssage: err,
+          });
+          console.log('errr', err);
+        }).on('progress',async (progress) => {
+          total = progress.percent ? progress.percent.toFixed(2) : 0;
+           pr = await FileStatus.updateOne({ name: item.name })
+          .set({
+            progress: total
+          });
+          FileStatus.publish([pr.id], {
+            progress: pr.progress,
+            theSecret: secret,
+          });
+        }).run();
+        
+        
+        FileStatus.subscribe(this.req,[pr.id]);
+        
+    }
+    return exits.success('start conversion');
+    return;
+      
+      
+      return exits.success('start conversion');
       /* let data = [];
       fs.readdir('../Animes/Dragon Ball Z/Season 01/', (err, files) => {
         if (err) {
@@ -44,28 +97,19 @@ module.exports = {
           }
         });
       }); */
-      await corvertAviToMp4();
+     // await corvertAviToMp4();
 
       // make sure you set the correct path to your input and output files
 
       function corvertAviToMp4 (){
-        let input = '../Animes/Dragon Ball Z/Season 01/S01E01.avi';
-        let output = '../Animes/Dragon Ball Z/Season 01/S01E01.mp4';
+        
+        
         sails.log('entrou');
         return new Promise((resolve,reject)=>{
-          ffmpeg(input).format('mp4').output(output).on('end', () => {
-            return resolve();
-          }).on('error', (err) => {
-            return reject(err);
-          }).on('progress', (progress) => {
-            sails.log(progress.percent.toFixed(2));
-            /*  let roomName = `conversion${_.deburr(this.req.sessionID)}`;
-        sails.sockets.join(this.req, roomName);
-
-        sails.sockets.broadcast(roomName, {porcent: progresstotal}); */
-          });
+         
         });
       }
+      
       return exits.success('start conversion');
     } catch (err) {
       console.error(err);

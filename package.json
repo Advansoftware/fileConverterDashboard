@@ -11,6 +11,7 @@
     "@sailshq/lodash": "^3.10.3",
     "@sailshq/socket.io-redis": "^5.2.0",
     "beercss": "^3.2.13",
+    "ffmpeg-static": "^5.1.0",
     "fluent-ffmpeg": "^2.1.2",
     "googleapis": "^105.0.0",
     "material-dynamic-colors": "^1.0.1",
