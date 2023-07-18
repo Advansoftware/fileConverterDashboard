@@ -1,5 +1,4 @@
 const ffmpeg = require ('fluent-ffmpeg');
-const ffmpeg_static = require ('ffmpeg-static');
 module.exports = {
 
 
@@ -29,22 +28,19 @@ module.exports = {
 
   fn: async function ({videoPath}, exits) {
   const thumbnail_path = "thumbnail.png";
-    console.log(videoPath)
-    ffmpeg.setFfmpegPath (ffmpeg_static);
-    // Criar uma miniatura no segundo 10 do vídeo
-    ffmpeg ('./S01E01.avi')
+    ffmpeg (videoPath)
     .on ('end', function () {
-    return exits.success('Miniatura criada com sucesso'); 
+      return exits.success(thumbnail_path); 
     })
     .on ('error', function (err) {
       console.error(err);
     })
     .screenshots ({
-    timestamps: [10],
+    timestamps: [20],
     filename: thumbnail_path,
     folder: process.cwd()+'/'
     });
-
+    return {}; 
     
   }
 

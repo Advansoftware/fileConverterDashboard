@@ -39,9 +39,10 @@ module.exports = {
         status: 0,
         progress: 0,
       });
-      await sails.helpers.generateThumbnail.with({
+     let teste = await sails.helpers.generateThumbnail.with({
         videoPath: item.name,
       });
+      sails.log('teste',teste)
       return;
       let roomName = `conversion`;
       sails.sockets.join(this.req, roomName);
