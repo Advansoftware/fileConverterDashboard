@@ -22,14 +22,13 @@ module.exports = {
   fn: async function (inputs, exits) {
     try {
       let files = await sails.helpers.searchFiles.with({
-        dir: '../Animes/Dragon Ball Z/Season 01/',
+        dir: './',
       });
 
       for(let file of await files){
 
         let moutdir = file.dir + file.name;
         let format = moutdir.split('.');
-        //let videoFormat = moutdir.replace(format[format.length - 1], 'mp4');
         let thumbnailFormat =  file.name.replace(format[format.length - 1], 'png');
 
         let thumbnail = await sails.helpers.generateThumbnail.with({
@@ -44,6 +43,7 @@ module.exports = {
 
         await FileStatus.findOrCreate({ name: moutdir }, {
           name: moutdir,
+          dir: file.dir,
           status: 0,
           progress: 0,
           thumbnail,

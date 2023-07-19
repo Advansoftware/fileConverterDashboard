@@ -8,6 +8,8 @@ parasails.registerPage('welcome', {
     progressConversion: 0,
     progress: 0,
     thumbnail: '',
+    sync:false,
+    thumbnailRequest: [],
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -31,6 +33,19 @@ parasails.registerPage('welcome', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-
+    startConversion: async function(){
+      try{
+        this.sync = true;
+        let data =  await Cloud.activeProcess();
+        if(data){
+          this.thumbnailRequest = data;
+          io.socket.get('/api/v1/ffproble');
+        }
+        this.sync = false;
+      }catch(err){
+        console.error(err)
+      }
+     
+    }
   }
 });

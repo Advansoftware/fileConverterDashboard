@@ -28,6 +28,13 @@
           testando Card ok
         </card>
     </grid>
+    <grid itemm="12" md="12"  lg="12">
+      <ul>
+         <li v-for="item in thumbnailRequest" :key="item.id">
+          {{ item }}
+        </li>
+      </ul>
+    </grid>
   </grid>
   <modal :open="modal" title="Teste Modal">
     estou testando esse modal
@@ -35,7 +42,8 @@
   <toast :active="modal" color="primary" :active.sync="modal">
     Testando
   </toast>
-  
+  <button @click="startConversion" :disabled="sync">Iniciar conversão</button>
+ <!-- <input type="file" webkitdirectory directory></input> -->
 
 </app>
 <%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>
