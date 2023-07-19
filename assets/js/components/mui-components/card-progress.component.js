@@ -24,7 +24,7 @@ parasails.registerComponent('card-progress', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: function (){
     return {
-      
+
     };
   },
 
@@ -32,7 +32,8 @@ parasails.registerComponent('card-progress', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
-  <article class="small no-padding">
+  <div >
+  <article class="small no-padding" v-if="thumbnail">
   <div class="progress left green" id="card-load"></div>
   <img  class="responsive medium" :src="thumbnail" style="opacity: .5"/>
   <div class="absolute bottom left right padding bottom-shadow white-text">
@@ -45,6 +46,7 @@ parasails.registerComponent('card-progress', {
   </nav>
 </div>
   </article>
+  </div>
   `,
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -55,7 +57,7 @@ parasails.registerComponent('card-progress', {
   },
   mounted: async function(){
     //…
-    
+
   },
   beforeDestroy: function() {
     //…
@@ -75,9 +77,9 @@ parasails.registerComponent('card-progress', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
 
-  generateGraph: function() {
-    $('#card-load').css('clip-path', "polygon(0% 0%, 0% 100%, "+this.value*100+"% 100%, "+this.value*100+"% 0%)")
-      
-   }
+    generateGraph: function() {
+      $('#card-load').css('clip-path', 'polygon(0% 0%, 0% 100%, '+this.value*100+'% 100%, '+this.value*100+'% 0%)');
+
+    }
   }
 });
