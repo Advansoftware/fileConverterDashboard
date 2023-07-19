@@ -42,7 +42,6 @@ module.exports = {
           }
         });
       });
-      sails.log(data);
       return exits.success(data);
     }catch(err){
       console.error(err);
