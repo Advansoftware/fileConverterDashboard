@@ -55,11 +55,11 @@ module.exports = {
           info,
         });
 
-        let pr = item;
-        let generateThumbnail = await fs.readFileSync(item.thumbnail, 'base64');
-        
+      
         if(item) {
-          
+          let pr = item;
+          let generateThumbnail = await fs.readFileSync(item.thumbnail, 'base64');
+
           let format = moutdir.split('.');
           let output = moutdir.replace(format[format.length - 1], "mp4");
 
@@ -83,25 +83,17 @@ module.exports = {
             total = progress.percent ? progress.percent.toFixed(2) : 0;
             pr = await FileStatus.updateOne({ name: item.name })
             .set({progress: total});
-  
+            //envia dados atraves do websocket
             FileStatus.publish([pr.id], {
               progress: pr.progress,
               thumbnail: generateThumbnail,
               theSecret: secret,
             });
           }).run();
-  
+          //registra o usuario na sala do websocket
           FileStatus.subscribe(this.req,[pr.id]);
       }
       }
-
-   
-      let getThumb = await fs.readFileSync(item.thumbnail, 'base64');
-      let roomName = `conversion`;
-      sails.sockets.join(this.req, roomName);
-    
-     
-      
       return exits.success('start conversion');
     } catch (err) {
       console.error(err);
