@@ -30,22 +30,26 @@ module.exports = {
   fn: async function (inputs, exits) {
     let secret = this.req.param('secret');
   try{
-    let listToConverter = await FileStatus.find({ where: { status: 0 }, limit: 1});
+    let listToConverter = await FileStatus.findOne({ status: 2 });
     let isRunning = await sails.helpers.verifyFfmpeg();
     
    
     if(!isRunning){
      
     }
-
-   /*  FileStatus.subscribe(this.req,[listToConverter.id]);
-
-    FileStatus.publish([listToConverter.id], {
-      progress: pr.progress,
-      thumbnail: generateThumbnail,
-      theSecret: secret,
-    }) */
-    exits.success();
+    if(listToConverter){
+      let thumbFile = listToConverter.dir + listToConverter.thumbnail;
+      let generateThumbnail = await fs.readFileSync(thumbFile, 'base64');
+  
+      FileStatus.subscribe(this.req, [listToConverter.id]);
+      FileStatus.publish(([listToConverter.id]), {
+        progress: listToConverter.progress,
+        thumbnail: generateThumbnail,
+      })
+    }
+   
+   
+    exits.success(FileStatus);
   }catch(err){
     console.error(err)
   }

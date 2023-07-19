@@ -39,12 +39,17 @@ module.exports = {
           let format = fileConverter.name.split('.');
           let videoFormat = fileConverter.name.replace(format[format.length - 1], 'mp4');
 
+          let info = await sails.helpers.fileInfo.with({
+            pathDir: fileConverter.name,
+          });
+
           ffmpeg(fileConverter.name).format('mp4').videoCodec('libx264').audioCodec('aac').output(videoFormat).on('end', async() => {
             await FileStatus.updateOne({ name: fileConverter.name })
                 .set({
                   status: 1,
-                  newName: output,
+                  newName: videoFormat,
                   progress: 100,
+                  info
                 });
           }).on('error', async(err) => {
             await FileStatus.updateOne({ name: fileConverter.name })
@@ -57,7 +62,6 @@ module.exports = {
             total = progress.percent ? progress.percent.toFixed(2) : 0;
             await FileStatus.updateOne({ name: fileConverter.name })
                 .set({status: 2, progress: total});
-                console.log(total)
           }).run();
         }
       }

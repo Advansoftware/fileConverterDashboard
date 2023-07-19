@@ -1,10 +1,10 @@
 // ['seconds', 'minutes', 'hours', 'dayOfMonth', 'month', 'dayOfWeek']
 module.exports.cron = {
     converter: {
-        schedule: '00 */2 * * * *',
+        schedule: '*/20 * * * * *',
         onTick: async function () {
             await sails.helpers.crons.converter();
-            sails.log.info('Converter Cron');
+            sails.log.info('Start FFMPEG');
         },
         start: true, // Start task immediately
         timezone: 'America/Sao_Paulo', // Custom timezone
