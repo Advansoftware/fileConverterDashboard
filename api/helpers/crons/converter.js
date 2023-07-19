@@ -27,7 +27,7 @@ module.exports = {
     try{
       let listToConverter = await FileStatus.find({ where: { status: 0 }}).limit(1);
       let isRunning = await sails.helpers.verifyFfmpeg();
-      
+
       if(!isRunning){
         await FileStatus.update({status:2})
         .set({status:0, progress: 0}).fetch();
@@ -38,7 +38,17 @@ module.exports = {
         if(verifyProgress===0 && !isRunning){
           let format = fileConverter.name.split('.');
           let videoFormat = fileConverter.name.replace(format[format.length - 1], 'mp4');
+          let thumbnailFormat =  fileConverter.name.replace(format[format.length - 1], 'png');
 
+          let thumbnail = await sails.helpers.generateThumbnail.with({
+            videoPath: fileConverter.name,
+            filepath: fileConverter.dir,
+            thumbnailPath: thumbnailFormat
+          });
+
+          await FileStatus.updateOne({ name: fileConverter.name })
+          .set({thumbnail: thumbnail});
+          
           let info = await sails.helpers.fileInfo.with({
             pathDir: fileConverter.name,
           });

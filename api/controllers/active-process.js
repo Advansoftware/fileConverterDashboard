@@ -28,14 +28,6 @@ module.exports = {
       for(let file of await files){
 
         let moutdir = file.dir + file.name;
-        let format = moutdir.split('.');
-        let thumbnailFormat =  file.name.replace(format[format.length - 1], 'png');
-
-        let thumbnail = await sails.helpers.generateThumbnail.with({
-          videoPath: moutdir,
-          filepath: file.dir,
-          thumbnailPath: thumbnailFormat
-        });
 
         let info = await sails.helpers.fileInfo.with({
           pathDir: moutdir,
@@ -46,7 +38,6 @@ module.exports = {
           dir: file.dir,
           status: 0,
           progress: 0,
-          thumbnail,
           info,
         });
       }
