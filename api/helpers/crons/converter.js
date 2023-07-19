@@ -39,13 +39,12 @@ module.exports = {
           let format = fileConverter.name.split('.');
           let videoFormat = fileConverter.name.replace(format[format.length - 1], 'mp4');
 
-          ffmpeg(fileConverter.name).format('mp4').output(videoFormat).on('end', async() => {
+          ffmpeg(fileConverter.name).format('mp4').videoCodec('libx264').audioCodec('aac').output(videoFormat).on('end', async() => {
             await FileStatus.updateOne({ name: fileConverter.name })
                 .set({
                   status: 1,
                   newName: output,
                   progress: 100,
-                  
                 });
           }).on('error', async(err) => {
             await FileStatus.updateOne({ name: fileConverter.name })
