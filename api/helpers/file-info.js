@@ -9,12 +9,7 @@ module.exports = {
 
 
   inputs: {
-    path: {
-      description: 'The relative path to an EJS template within our `views/emails/` folder -- WITHOUT the file extension.',
-      type: 'string',
-      required: true
-    },
-    file: {
+    pathDir: {
       description: 'The relative path to an EJS template within our `views/emails/` folder -- WITHOUT the file extension.',
       type: 'string',
       required: true
@@ -31,14 +26,14 @@ module.exports = {
   },
 
 
-  fn: async function ({path, file}, exits) {
+  fn: async function ({pathDir}, exits) {
     // TODO
     try{
-      let ffprobeResult = await ffprobe(path+file, 'utf8');
+      let ffprobeResult = await ffprobe(pathDir, 'utf8');
       return exits.success(ffprobeResult);
     }catch(err){
       console.error(err);
-      return
+      return;
     }
   }
 

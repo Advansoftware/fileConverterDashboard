@@ -10,7 +10,7 @@ module.exports = {
 
 
   inputs: {
-    
+
   },
 
 
@@ -29,79 +29,38 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     let secret = this.req.param('secret');
-    try {
-
-      let files = await sails.helpers.searchFiles.with({
-        dir: './',
-      });
-      
-      for(let file of await files.data){
-
-        let moutdir = file.dir + file.name;
-
-        let thumbnail = await sails.helpers.generateThumbnail.with({
-          videoPath: file.name,
-        });
-        let info = await sails.helpers.fileInfo.with({
-          path: file.dir,
-          file: file.name,
-        });
-        
-        let item =  await FileStatus.findOrCreate({ name: moutdir }, { 
-          name: moutdir,
-          status: 0,
-          progress: 0,
-          thumbnail,
-          info,
-        });
-
-      
-        if(item) {
-          let pr = item;
-          let generateThumbnail = await fs.readFileSync(item.thumbnail, 'base64');
-
-          let format = moutdir.split('.');
-          let output = moutdir.replace(format[format.length - 1], "mp4");
-
-          ffmpeg(moutdir).format('mp4').output(output).on('end', async() => {
-            pr = await FileStatus.updateOne({ name: item.name })
+    return;
+    if(item) {
+      let pr = item;
+      let generateThumbnail = await fs.readFileSync(item.thumbnail, 'base64');
+      ffmpeg(moutdir).format('mp4').output(videoFormat).on('end', async() => {
+        pr = await FileStatus.updateOne({ name: item.name })
             .set({
               status: 1,
               newName: output,
               progress: 100,
               thumbnail: ''
             });
-            console.log(pr);
-          }).on('error', async(err) => {
-             pr = await FileStatus.updateOne({ name: item.name })
+      }).on('error', async(err) => {
+        pr = await FileStatus.updateOne({ name: item.name })
             .set({
               status: 2,
               errorMenssage: err,
             });
-            console.log('errr', err);
-          }).on('progress',async (progress) => {
-            total = progress.percent ? progress.percent.toFixed(2) : 0;
-            pr = await FileStatus.updateOne({ name: item.name })
+        console.log('errr', err);
+      }).on('progress',async (progress) => {
+        total = progress.percent ? progress.percent.toFixed(2) : 0;
+        pr = await FileStatus.updateOne({ name: item.name })
             .set({progress: total});
-            //envia dados atraves do websocket
-            FileStatus.publish([pr.id], {
-              progress: pr.progress,
-              thumbnail: generateThumbnail,
-              theSecret: secret,
-            });
-          }).run();
-          //registra o usuario na sala do websocket
-          FileStatus.subscribe(this.req,[pr.id]);
-      }
-      }
-      return exits.success('start conversion');
-    } catch (err) {
-      console.error(err);
+        //envia dados atraves do websocket
+        FileStatus.publish([pr.id], {
+          progress: pr.progress,
+          thumbnail: generateThumbnail,
+          theSecret: secret,
+        });
+      }).run();
+      //registra o usuario na sala do websocket
+      FileStatus.subscribe(this.req,[pr.id]);
     }
-    // All done.
-
-
   }
-
-
 };

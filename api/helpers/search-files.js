@@ -41,12 +41,13 @@ module.exports = {
             data.push({dir, name: file});
           }
         });
-      }); 
-      return exits.success({data})
+      });
+      sails.log(data);
+      return exits.success(data);
     }catch(err){
-      console.error(err)
+      console.error(err);
     }
-  
+
   }
 
 

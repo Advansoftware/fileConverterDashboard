@@ -14,6 +14,16 @@ module.exports = {
       type: 'string',
       required: true
     },
+    filepath: {
+      description: 'The relative path to an EJS template within our `views/emails/` folder -- WITHOUT the file extension.',
+      type: 'string',
+      required: true
+    },
+    thumbnailPath: {
+      description: 'The relative path to an EJS template within our `views/emails/` folder -- WITHOUT the file extension.',
+      type: 'string',
+      required: true
+    },
   },
 
 
@@ -26,22 +36,21 @@ module.exports = {
   },
 
 
-  fn: async function ({videoPath}, exits) {
-  const thumbnail_path = "thumbnail.png";
+  fn: async function ({videoPath, filepath, thumbnailPath}, exits) {
     ffmpeg (videoPath)
-    .on ('end', function () {
-      return exits.success(thumbnail_path); 
+    .on ('end', () => {
+      return exits.success(thumbnailPath);
     })
-    .on ('error', function (err) {
+    .on ('error', (err) => {
       console.error(err);
     })
     .screenshots ({
-    timestamps: [20],
-    filename: thumbnail_path,
-    folder: process.cwd()+'/'
+      timestamps: [20],
+      filename: thumbnailPath,
+      folder: filepath
     });
-    return {}; 
-    
+    return {};
+
   }
 
 
