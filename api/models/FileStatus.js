@@ -49,6 +49,10 @@ module.exports = {
       type: 'string',
       description: 'A still-unconfirmed email address that this user wants to change to (if relevant).'
     },
+    info: {
+      type: 'ref',
+      description: 'A still-unconfirmed email address that this user wants to change to (if relevant).'
+    },
 
   },
 

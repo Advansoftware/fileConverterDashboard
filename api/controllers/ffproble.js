@@ -1,7 +1,5 @@
-const ffprobe = require('@joshyour/ffprobe-client');
-const fs = require('fs');
 const ffmpeg = require('fluent-ffmpeg');
-const command = ffmpeg();
+const fs = require('fs');
 module.exports = {
 
 
@@ -30,83 +28,79 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    let name = './S01E01.avi';
-    let output = './S01E01.mp4';
-    var secret = this.req.param('secret');
+    let secret = this.req.param('secret');
     try {
 
-      let thumbnail = await sails.helpers.generateThumbnail.with({
-        videoPath: name,
+      let files = await sails.helpers.searchFiles.with({
+        dir: './',
       });
+      
+      for(let file of await files.data){
 
-     let item =  await FileStatus.findOrCreate({ name: name }, { 
-        name,
-        status: 0,
-        progress: 0,
-        thumbnail,
-      });
+        let moutdir = file.dir + file.name;
+
+        let thumbnail = await sails.helpers.generateThumbnail.with({
+          videoPath: file.name,
+        });
+        let info = await sails.helpers.fileInfo.with({
+          path: file.dir,
+          file: file.name,
+        });
+        
+        let item =  await FileStatus.findOrCreate({ name: moutdir }, { 
+          name: moutdir,
+          status: 0,
+          progress: 0,
+          thumbnail,
+          info,
+        });
+
+        let pr = item;
+        let generateThumbnail = await fs.readFileSync(item.thumbnail, 'base64');
+        
+        if(item) {
+          
+          let format = moutdir.split('.');
+          let output = moutdir.replace(format[format.length - 1], "mp4");
+
+          ffmpeg(moutdir).format('mp4').output(output).on('end', async() => {
+            pr = await FileStatus.updateOne({ name: item.name })
+            .set({
+              status: 1,
+              newName: output,
+              progress: 100,
+              thumbnail: ''
+            });
+            console.log(pr);
+          }).on('error', async(err) => {
+             pr = await FileStatus.updateOne({ name: item.name })
+            .set({
+              status: 2,
+              errorMenssage: err,
+            });
+            console.log('errr', err);
+          }).on('progress',async (progress) => {
+            total = progress.percent ? progress.percent.toFixed(2) : 0;
+            pr = await FileStatus.updateOne({ name: item.name })
+            .set({progress: total});
+  
+            FileStatus.publish([pr.id], {
+              progress: pr.progress,
+              thumbnail: generateThumbnail,
+              theSecret: secret,
+            });
+          }).run();
+  
+          FileStatus.subscribe(this.req,[pr.id]);
+      }
+      }
+
+   
       let getThumb = await fs.readFileSync(item.thumbnail, 'base64');
       let roomName = `conversion`;
       sails.sockets.join(this.req, roomName);
-      let pr = item;
-      if(item) {
-        
-        ffmpeg(item.name).format('mp4').output(output).on('end', async() => {
-          pr = await FileStatus.updateOne({ name: item.name })
-          .set({
-            status: 1,
-            newName: output,
-            progress: 100,
-            thumbnail: ''
-          });
-          console.log(pr);
-        }).on('error', async(err) => {
-           pr = await FileStatus.updateOne({ name: item.name })
-          .set({
-            status: 2,
-            errorMenssage: err,
-          });
-          console.log('errr', err);
-        }).on('progress',async (progress) => {
-          total = progress.percent ? progress.percent.toFixed(2) : 0;
-          pr = await FileStatus.updateOne({ name: item.name })
-          .set({progress: total});
-
-          FileStatus.publish([pr.id], {
-            progress: pr.progress,
-            thumbnail:getThumb,
-            theSecret: secret,
-          });
-        }).run();
-
-        FileStatus.subscribe(this.req,[pr.id]);
-    }
-
-      /* let data = [];
-      fs.readdir('../Animes/Dragon Ball Z/Season 01/', (err, files) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        files.forEach(async(file) => {
-          if (file.endsWith('.avi')) {
-            let ffprobeResult = await ffprobe('../Animes/Dragon Ball Z/Season 01/'+file, 'utf8');
-            data.push({[file]: ffprobeResult});
-          }
-        });
-      }); */
-     // await corvertAviToMp4();
-
-      // make sure you set the correct path to your input and output files
-
-      function corvertAviToMp4 (){
-        
-        
-        sails.log('entrou');
-        return new Promise((resolve,reject)=>{
-         
-        });
-      }
+    
+     
       
       return exits.success('start conversion');
     } catch (err) {
