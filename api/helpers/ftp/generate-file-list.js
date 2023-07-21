@@ -14,6 +14,10 @@ module.exports = {
       type: 'string',
       required: true
     },
+    action: {
+      description: 'The relative path to an EJS template within our `views/emails/` folder -- WITHOUT the file extension.',
+      type: 'string',
+    },
   },
 
 
@@ -26,7 +30,7 @@ module.exports = {
   },
 
 
-  fn: async function ({configDir}, exits) {
+  fn: async function ({configDir, action='create'}, exits) {
     // TODO
     const client = new ftp.Client();
     await client.access({
@@ -35,6 +39,9 @@ module.exports = {
       password: "278663",
       secure: false
   });
+    if(action!=='create'){
+      await InsertFiles.destroy({});
+    }
     let newFileArray = [];
     for(let files of await sails.helpers.ftp.listDir(configDir)){
       let primaryList = await client.list(files.dir);
@@ -50,9 +57,12 @@ module.exports = {
           bytes: returnFile.size,
           status: 0,
         });
+       
         newFileArray.push(data)
+        return;
       }
     }
+    client.close()
     return exits.success(newFileArray);
   }
 

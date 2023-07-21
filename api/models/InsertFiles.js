@@ -42,7 +42,7 @@ module.exports = {
       example: 'teste'
     },
     status: {
-      type: 'string',
+      type: 'number',
       example: 'teste'
     },
     bytes: {

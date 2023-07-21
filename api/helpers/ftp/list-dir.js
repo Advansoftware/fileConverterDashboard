@@ -58,7 +58,7 @@ module.exports = {
           }
           await client.cdup();
       }
-
+      client.close()
       return exits.success(list);
     }catch(err){
       console.error(err)

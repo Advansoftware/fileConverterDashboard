@@ -22,37 +22,32 @@ module.exports = {
   fn: async function (inputs, exits) {
     try {
       let configDirName = 'Animes'
-    console.log(await sails.helpers.ftp.generateFileList(configDirName))
-      return
-      client.trackProgress(info => console.log(info.bytesOverall))
+      //await sails.helpers.ftp.generateFileList(configDirName,'update');
       
-      await client.downloadTo("S01E01_copia.avi", "S01E01.avi")
-      //console.log(await client.list());
-      client.trackProgress()
-      client.close()
-        return;
-
-
-      let files = await sails.helpers.searchFiles.with({
-        dir: './',
-      });
-    
-      for(let file of await files){
-
-        let moutdir = file.dir + file.name;
-
-        let info = await sails.helpers.fileInfo.with({
-          pathDir: moutdir,
+      
+      await sails.helpers.ftp.downloader();
+      return 
+        let files = await sails.helpers.searchFiles.with({
+          dir: './',
         });
-
-        await FileStatus.findOrCreate({ name: moutdir }, {
-          name: moutdir,
-          dir: file.dir,
-          status: 0,
-          progress: 0,
-          info,
-        });
-      }
+  
+        for(let file of await files){
+  
+          let moutdir = file.dir + file.name;
+  
+          let info = await sails.helpers.fileInfo.with({
+            pathDir: moutdir,
+          });
+  
+          await FileStatus.findOrCreate({ name: moutdir }, {
+            name: moutdir,
+            dir: file.dir,
+            status: 0,
+            progress: 0,
+            info,
+          });
+        }
+  
       let getAll = await FileStatus.find();
 
       return exits.success(getAll);
