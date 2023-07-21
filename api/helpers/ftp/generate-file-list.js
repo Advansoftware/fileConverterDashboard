@@ -57,9 +57,8 @@ module.exports = {
           bytes: returnFile.size,
           status: 0,
         });
-       
+
         newFileArray.push(data)
-        return;
       }
     }
     client.close()

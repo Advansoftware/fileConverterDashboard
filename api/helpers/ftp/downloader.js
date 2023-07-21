@@ -12,7 +12,6 @@ module.exports = {
 
   },
 
-
   exits: {
 
     success: {
@@ -21,9 +20,7 @@ module.exports = {
 
   },
 
-
   fn: async function (inputs, exits) {
-    console.log('entrou aqui')
     const client = new ftp.Client();
     try{
       //client.ftp.verbose = true;
@@ -34,18 +31,25 @@ module.exports = {
         secure: false
     });
 
-
-    let fileDonwload  = await InsertFiles.findOne({status: 0});
-
-    let newName = fileDonwload.name.replace(/\s/g, '_');
-    await client.cd(fileDonwload.dir);
-    client.trackProgress(info => console.log(info.bytesOverall))
-    await client.downloadTo(newName, fileDonwload.name)
-    
-    
-    client.trackProgress()
+    for( let fileDonwload of await InsertFiles.find({status: 0})){
+      let verify = await InsertFiles.count({status: 1});
+      if(verify===0){
+          let newName = fileDonwload.name.replace(/\s/g, '_');
+          await client.cd(fileDonwload.dir);
+          await InsertFiles.updateOne({name:fileDonwload.name, dir:  fileDonwload.dir}).set({
+          status: 1
+          });
+          client.trackProgress(info => console.log(info.bytesOverall))
+          await client.downloadTo(newName, fileDonwload.name)
+      }
+      client.trackProgress()
+      
+      await InsertFiles.updateOne({name:fileDonwload.name, dir:  fileDonwload.dir}).set({
+        status: 2
+      });
+    }
     client.close()
-    return exits.success(fileDonwload);
+    return exits.success();
 
     }catch(err){
       console.log(err)
