@@ -1,4 +1,3 @@
-
 module.exports = {
 
 
@@ -22,11 +21,9 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     try {
-        
-      let configDirName = 'Animes'
-     console.log('return',await sails.helpers.ftp.listDir(configDirName))
+      let configDirName = 'Filmes'
+    console.log(await sails.helpers.ftp.generateFileList(configDirName))
       return
-      await client.ensureDir("Animes/Dragon Ball Z/Season 01");
       client.trackProgress(info => console.log(info.bytesOverall))
       
       await client.downloadTo("S01E01_copia.avi", "S01E01.avi")
