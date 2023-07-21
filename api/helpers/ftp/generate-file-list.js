@@ -37,13 +37,20 @@ module.exports = {
   });
     let newFileArray = [];
     for(let files of await sails.helpers.ftp.listDir(configDir)){
-      
       let primaryList = await client.list(files.dir);
       let filesList = primaryList.filter((list)=> list.type === ftp.FileType.File);
       for(let returnFile of filesList){
         let fileSize = await sails.helpers.bytesToSize(returnFile.size);
         let getExtension = returnFile.name.split('.');
-        newFileArray.push({dir:files.dir, name: returnFile.name,fileSize, extension: getExtension[getExtension.length - 1].toLocaleLowerCase()})
+        let data = await InsertFiles.findOrCreate({ name: returnFile.name, dir:files.dir }, {
+          name: returnFile.name,
+          dir:files.dir,
+          extension: getExtension[getExtension.length - 1].toLocaleLowerCase(),
+          fileSize,
+          bytes: returnFile.size,
+          status: 0,
+        });
+        newFileArray.push(data)
       }
     }
     return exits.success(newFileArray);

@@ -21,7 +21,7 @@ module.exports = {
 
   fn: async function (inputs, exits) {
     try {
-      let configDirName = 'Filmes'
+      let configDirName = 'Animes'
     console.log(await sails.helpers.ftp.generateFileList(configDirName))
       return
       client.trackProgress(info => console.log(info.bytesOverall))
