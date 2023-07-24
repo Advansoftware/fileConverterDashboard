@@ -31,7 +31,7 @@ module.exports = {
         secure: false
     });
   
-    let verify = await InsertFiles.count({status: 'progress'});
+    let verify = await InsertFiles.count({status: 'downloading'});
     let verifyFFmpeg = await FileStatus.count({status:'converting'});
     let verifyConverted = await InsertFiles.count({status: 'done'});
     let files = await sails.helpers.searchFiles.with({
@@ -45,12 +45,14 @@ module.exports = {
           let newName = fileDonwload.name.replace(/\s/g, '_');
           //await client.cd();
           await InsertFiles.updateOne({name:fileDonwload.name, dir:  fileDonwload.dir}).set({
-          status: 2
+          status: 'downloading',
           });
 
           client.trackProgress(async(info) => {
+            let progress =  ((100 * info.bytesOverall) / fileDonwload.bytes).toFixed(2);
             await InsertFiles.updateOne({name:fileDonwload.name, dir:  fileDonwload.dir}).set({
-              bytesDowloaded: info.bytesOverall
+              bytesDowloaded: info.bytesOverall,
+              progress
               });
           })
 
@@ -61,6 +63,27 @@ module.exports = {
       
       await InsertFiles.updateOne({name:fileDonwload.name, dir:  fileDonwload.dir}).set({
         status: 'done'
+      });
+      let moutdir = 'download/'+newName;
+
+      let format = fileDonwload.name.split('.');
+      let thumbnailFormat =  fileDonwload.name.replace(format[format.length - 1], 'png');
+
+      let info = await sails.helpers.fileInfo.with({
+        pathDir: 'download/'+newName,
+      });
+      let thumbnail = await sails.helpers.generateThumbnail.with({
+        videoPath: moutdir,
+        filepath: 'download/',
+        thumbnailPath: thumbnailFormat
+      });
+      await FileStatus.findOrCreate({ name: moutdir }, {
+        name: moutdir,
+        dir: 'download/',
+        status: 'done',
+        progress: 0,
+        info,
+        thumbnail
       });
     }
     }

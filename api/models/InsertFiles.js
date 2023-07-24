@@ -53,6 +53,10 @@ module.exports = {
       type: 'number',
       example: 1
     },
+    progress: {
+      type: 'number',
+      example: 1
+    },
   },
 
 };

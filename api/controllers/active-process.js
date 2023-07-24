@@ -23,27 +23,6 @@ module.exports = {
     try {
       let configDirName = 'Animes'
       await sails.helpers.ftp.generateFileList(configDirName);
-
-      let files = await sails.helpers.searchFiles.with({
-        dir: 'download/',
-      });
-
-        for(let file of await files){
-  
-          let moutdir = file.dir + file.name;
-  
-          let info = await sails.helpers.fileInfo.with({
-            pathDir: moutdir,
-          });
-  
-          await FileStatus.findOrCreate({ name: moutdir }, {
-            name: moutdir,
-            dir: file.dir,
-            status: 0,
-            progress: 0,
-            info,
-          });
-        }
   
       let getAll = await FileStatus.find();
 

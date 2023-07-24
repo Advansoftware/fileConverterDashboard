@@ -40,21 +40,11 @@ module.exports = {
         if(verifyProgress===0 && !isRunning && downloaded>0){
           let format = fileConverter.name.split('.');
           let videoFormat = fileConverter.name.replace(format[format.length - 1], 'mp4');
-          let thumbnailFormat =  fileConverter.name.replace(format[format.length - 1], 'png');
-
-          let thumbnail = await sails.helpers.generateThumbnail.with({
-            videoPath: fileConverter.name,
-            filepath: fileConverter.dir,
-            thumbnailPath: thumbnailFormat
-          });
-
-          await FileStatus.updateOne({ name: fileConverter.name })
-          .set({thumbnail: thumbnail});
           
           let info = await sails.helpers.fileInfo.with({
             pathDir: fileConverter.name,
           });
-
+          console.log('cheguei aqui meu link sera: ', fileConverter.name)
           ffmpeg(fileConverter.name).format('mp4').videoCodec('libx264').audioCodec('aac').output(videoFormat).on('end', async() => {
             await FileStatus.updateOne({ name: fileConverter.name })
                 .set({
