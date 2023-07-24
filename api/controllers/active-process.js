@@ -22,12 +22,10 @@ module.exports = {
   fn: async function (inputs, exits) {
     try {
       let configDirName = 'Animes'
-      await sails.helpers.ftp.generateFileList(configDirName,'update');
-      
-      await sails.helpers.ftp.downloader();
+      await sails.helpers.ftp.generateFileList(configDirName);
 
       let files = await sails.helpers.searchFiles.with({
-        dir: './',
+        dir: 'download/',
       });
 
         for(let file of await files){

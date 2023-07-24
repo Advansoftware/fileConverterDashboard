@@ -42,6 +42,7 @@ module.exports.routes = {
   'POST  /api/v1/observe-my-session':                 { action: 'observe-my-session', hasSocketFeatures: true },
 
   //Portal
+  'GET /api/v1/get-files': { action: 'get-files' },
   'POST /api/v1/portal/create': { action: 'portal/create' },
   'GET /api/v1/portal/get-list': { action: 'portal/get-list' },
   'PUT /api/v1/portal/active': { action: 'portal/delete' },
@@ -49,4 +50,5 @@ module.exports.routes = {
   'GET /api/v1/ffproble': { action: 'ffproble', hasSocketFeatures: true},
   'GET /api/v1/driveconfig': { action: 'driveconfig' },
   'POST /api/v1/active-process': { action: 'active-process' },
+  
 };

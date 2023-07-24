@@ -55,7 +55,8 @@ module.exports = {
           extension: getExtension[getExtension.length - 1].toLocaleLowerCase(),
           fileSize,
           bytes: returnFile.size,
-          status: 0,
+          status: 'new',
+          bytesDowloaded: 0,
         });
 
         newFileArray.push(data)

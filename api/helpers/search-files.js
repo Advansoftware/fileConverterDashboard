@@ -31,13 +31,13 @@ module.exports = {
     try{
 
       let data = [];
-      fs.readdir(dir, (err, files) => {
+      fs.readdirSync(dir, (err, files) => {
         if (err) {
           console.error(err);
           return;
         }
         files.forEach((file) => {
-          if (file.endsWith('.avi')) {
+          if (!file.endsWith('.mp4')) {
             data.push({dir, name: file});
           }
         });

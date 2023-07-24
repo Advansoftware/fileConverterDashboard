@@ -42,12 +42,16 @@ module.exports = {
       example: 'teste'
     },
     status: {
-      type: 'number',
-      example: 'teste'
+      type: 'string',
+      example: 'progress'
     },
     bytes: {
       type: 'number',
-      example: 'teste'
+      example: 1
+    },
+    bytesDowloaded: {
+      type: 'number',
+      example: 1
     },
   },
 

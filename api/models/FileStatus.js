@@ -30,7 +30,7 @@ module.exports = {
 
     status: {
       type: 'string',
-      description: 'The confirmation status of the user\'s email address.',
+      example: 'progress'
     },
 
     newName: {

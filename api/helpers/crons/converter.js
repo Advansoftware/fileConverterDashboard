@@ -25,17 +25,19 @@ module.exports = {
   fn: async function (inputs, exits) {
     // TODO
     try{
-      let listToConverter = await FileStatus.find({ where: { status: 0 }}).limit(1);
+      let listToConverter = await FileStatus.find({ where: { status: 'done' }}).limit(1);
       let isRunning = await sails.helpers.verifyFfmpeg();
 
       if(!isRunning){
-        await FileStatus.update({status:2})
-        .set({status:0, progress: 0}).fetch();
+        await FileStatus.update({status:'converting'})
+        .set({status:'done', progress: 0}).fetch();
       }
       for(let fileConverter of await listToConverter){
 
-        let verifyProgress = await FileStatus.count({ where: { status: 2 }});
-        if(verifyProgress===0 && !isRunning){
+        let verifyProgress = await FileStatus.count({ where: { status: 'converting' }});
+        let downloaded = await InsertFiles.count({ status: 'done' });
+
+        if(verifyProgress===0 && !isRunning && downloaded>0){
           let format = fileConverter.name.split('.');
           let videoFormat = fileConverter.name.replace(format[format.length - 1], 'mp4');
           let thumbnailFormat =  fileConverter.name.replace(format[format.length - 1], 'png');
@@ -56,22 +58,28 @@ module.exports = {
           ffmpeg(fileConverter.name).format('mp4').videoCodec('libx264').audioCodec('aac').output(videoFormat).on('end', async() => {
             await FileStatus.updateOne({ name: fileConverter.name })
                 .set({
-                  status: 1,
+                  status: 'converted',
                   newName: videoFormat,
                   progress: 100,
                   info
                 });
+                await InsertFiles.updateOne({name: fileConverter.name, dir:  fileConverter.dir}).set({
+                  converted: 'converted'
+                  });
           }).on('error', async(err) => {
             await FileStatus.updateOne({ name: fileConverter.name })
                 .set({
-                  status: 3,
+                  status: 'error',
                   errorMenssage: err,
                 });
             console.error('errr', err);
           }).on('progress',async (progress) => {
             total = progress.percent ? progress.percent.toFixed(2) : 0;
             await FileStatus.updateOne({ name: fileConverter.name })
-                .set({status: 2, progress: total});
+                .set({status: 'converting', progress: total});
+            await InsertFiles.updateOne({name: fileConverter.name, dir:  fileConverter.dir}).set({
+              status: 'converting'
+              });
           }).run();
         }
       }
