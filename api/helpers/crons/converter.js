@@ -40,7 +40,7 @@ module.exports = {
         if(verifyProgress===0 && !isRunning && downloaded>0){
           let format = fileConverter.name.split('.');
           let videoFormat = fileConverter.name.replace(format[format.length - 1], 'mp4');
-          
+
           let info = await sails.helpers.fileInfo.with({
             pathDir: fileConverter.name,
           });
@@ -53,8 +53,8 @@ module.exports = {
                   progress: 100,
                   info
                 });
-                await InsertFiles.updateOne({name: fileConverter.name, dir:  fileConverter.dir}).set({
-                  converted: 'converted'
+                await InsertFiles.updateOne({status: 'done'}).set({
+                  status: 'converted'
                   });
           }).on('error', async(err) => {
             await FileStatus.updateOne({ name: fileConverter.name })
