@@ -43,6 +43,7 @@ parasails.registerPage('welcome', {
         }
         console.log(this.FileStatus)
         this.sync = false;
+        thie.getData();
       }catch(err){
         console.error(err)
       }
@@ -52,6 +53,7 @@ parasails.registerPage('welcome', {
       let data = await Cloud.getProgress();
       this.listAllFilesInsert = data.listAllFilesInsert;
       this.listAllConverted = data.listAllConverted;
+      setTimeout(() => this.getData(), 6000)
     },
      
   }
