@@ -24,12 +24,7 @@ module.exports = {
     const client = new ftp.Client();
     try{
       //client.ftp.verbose = true;
-      await client.access({
-        host: "app.advansoftware.shop",
-        user: "admin",
-        password: "278663",
-        secure: false
-    });
+      
   
     let verify = await InsertFiles.count({status: 'downloading'});
     let verifyFFmpeg = await FileStatus.count({status:'converting'});
@@ -41,7 +36,12 @@ module.exports = {
     });
 
     if(verify===0 && verifyFFmpeg===0 && verifyConverted === 0 && verifyUploading ===0  && verifyDone ===0 && files.length===0){
-      
+      await client.access({
+          host: "app.advansoftware.shop",
+          user: "admin",
+          password: "278663",
+          secure: false
+      });
     for( let fileDonwload of await InsertFiles.find({status: 'new'}).limit(1)){
 
           let newName = fileDonwload.name.replace(/\s/g, '_');
