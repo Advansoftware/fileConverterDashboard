@@ -66,7 +66,8 @@ module.exports = {
       client.trackProgress()
       
       await InsertFiles.updateOne({name:fileUpload.name, dir: fileUpload.dir}).set({
-        status: 'uploaded'
+        status: 'uploaded',
+        progressUpload: 100
       });
       
       await FileStatus.updateOne({ name: moutdir }, {
