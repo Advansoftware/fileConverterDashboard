@@ -266,7 +266,7 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
      onlyAllowOrigins: [
-       'http://app.advansoftware.cloud:1337',
+       'http://app.advansoftware.cloud',
     //   'https://staging.example.com',
      ],
 

@@ -41,7 +41,7 @@ module.exports = Object.assign({}, PRODUCTION_CONFIG, {
 
     onlyAllowOrigins: [
       'http://localhost:1337',
-      'http://app.advansofarware.cloud',
+      'http://app.advansofarware.cloud:1337',
       // 'http://example-staging.herokuapp.com',
       // 'https://staging.example.com',
       // 'http://staging.example.com',
