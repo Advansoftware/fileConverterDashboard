@@ -67,8 +67,8 @@ module.exports = {
       });
       let moutdir = 'download/'+newName;
 
-      let format = fileDonwload.name.split('.');
-      let thumbnailFormat =  fileDonwload.name.replace(format[format.length - 1], 'png');
+      let format = newName.split('.');
+      let thumbnailFormat =  newName.replace(format[format.length - 1], 'png');
 
       let info = await sails.helpers.fileInfo.with({
         pathDir: 'download/'+newName,

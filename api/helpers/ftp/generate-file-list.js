@@ -49,17 +49,33 @@ module.exports = {
       for(let returnFile of filesList){
         let fileSize = await sails.helpers.bytesToSize(returnFile.size);
         let getExtension = returnFile.name.split('.');
-        let data = await InsertFiles.findOrCreate({ name: returnFile.name, dir:files.dir }, {
-          name: returnFile.name,
-          dir:files.dir,
-          extension: getExtension[getExtension.length - 1].toLocaleLowerCase(),
-          fileSize,
-          bytes: returnFile.size,
-          status: 'new',
-          bytesDowloaded: 0,
-        });
-
-        newFileArray.push(data)
+        let extension = getExtension[getExtension.length - 1].toLocaleLowerCase();
+        if(
+          extension==='mov'||
+          extension==='wmv'||
+          extension==='avi'||
+          extension==='mkv'||
+          extension==='flv'||
+          extension==='f4v'||
+          extension==='swf'||
+          extension==='rm'||
+          extension==='rmvb'||
+          extension==='mks'||
+          extension==='3gpp'
+         ){
+          let data = await InsertFiles.findOrCreate({ name: returnFile.name, dir:files.dir }, {
+            name: returnFile.name,
+            dir:files.dir,
+            extension,
+            fileSize,
+            bytes: returnFile.size,
+            status: 'new',
+            bytesDowloaded: 0,
+          });
+  
+          newFileArray.push(data)
+        }
+        
       }
     }
     client.close()
