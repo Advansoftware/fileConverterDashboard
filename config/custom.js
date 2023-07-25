@@ -22,7 +22,7 @@ module.exports.custom = {
   * > but it can also be used for user-uploaded images, webhooks, etc.      *
   *                                                                         *
   **************************************************************************/
-  baseUrl: 'http://app.advansoftware.cloud:1337',
+  baseUrl: 'http://app.advansoftware.cloud',
 
   /**************************************************************************
   *                                                                         *
