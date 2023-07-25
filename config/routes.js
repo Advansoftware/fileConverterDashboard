@@ -43,6 +43,7 @@ module.exports.routes = {
 
   //Portal
   'GET /api/v1/get-files': { action: 'get-files' },
+  'GET /api/v1/get-progress': { action: 'get-progress' },
   'POST /api/v1/portal/create': { action: 'portal/create' },
   'GET /api/v1/portal/get-list': { action: 'portal/get-list' },
   'PUT /api/v1/portal/active': { action: 'portal/delete' },

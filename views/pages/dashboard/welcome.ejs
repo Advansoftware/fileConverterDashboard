@@ -8,9 +8,7 @@
       >
       </switch-button>
     </grid>
-    <grid item sm="12" md="12" lg="6">
-      <card-progress :value="progressConversion" :thumbnail="thumbnail"></card-progress>
-    </grid>
+   
       
     <grid item sm="12" md="6" lg="12">
       <chart
@@ -28,12 +26,53 @@
           testando Card ok
         </card>
     </grid>
-    <grid itemm="12" md="12"  lg="12">
-      <ul>
-         <li v-for="item in thumbnailRequest" :key="item.id">
-          {{ item }}
-        </li>
-      </ul>
+    <grid item sm="12" md="12" lg="6">
+      <card title="Insert File">
+        <table>
+          <tr v-for="insertfile in listAllFilesInsert" :key="insertfile._id">
+            <td>
+              {{ insertfile._id }}
+            </td>
+            <td>
+              {{ insertfile.name }}
+            </td>
+            <td>
+              {{ insertfile.fileSize }}
+            </td>
+            <td>
+              {{ insertfile.status }}
+            </td>
+            <td>
+              {{ insertfile.progressDownload }}
+            </td>
+            <td>
+              {{ insertfile.progressUpload }}
+            </td>
+          </tr>
+        </table>
+      </card>
+    </grid>
+    <grid item sm="12" md="12" lg="6">
+      <card title="All Converted">
+      <table>
+        <tr v-for="converted in listAllConverted" :key="item._id">
+          <td>
+            {{ item._id }}
+          </td>
+          <td>
+            {{ item.name }}
+          </td>
+          <td>
+            {{ item.status }}
+          </td>
+          <td>
+            {{ item.progress }}
+          </td>
+        
+        </tr>
+      </table>
+      
+    </card>
     </grid>
   </grid>
   <modal :open="modal" title="Teste Modal">
@@ -44,6 +83,6 @@
   </toast>
   <button @click="startConversion" :disabled="sync">Iniciar conversão</button>
  <!-- <input type="file" webkitdirectory directory></input> -->
-
+  
 </app>
 <%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

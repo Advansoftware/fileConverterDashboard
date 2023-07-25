@@ -7,28 +7,28 @@ parasails.registerPage('welcome', {
     FileStatus: [],
     pageLoadedAt: Date.now(),
     progressConversion: 0,
-    progress: 0,
+    listAllFilesInsert: [],
+    listAllConverted: [],
     thumbnail: '',
     sync:false,
-    thumbnailRequest: [],
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function() {
-    //…
     _.extend(this, window.SAILS_LOCALS);
   },
   mounted: async function() {
+    await this.getData();
     //…
-    io.socket.get('/api/v1/ffproble');
+    /* io.socket.get('/api/v1/ffproble');
     await Cloud.on('filestatus', (msg) => {
       this.progressConversion = (msg.progress/100).toFixed(3);
       this.progress = (this.progressConversion.substr(2)/10).toFixed(2)
       this.thumbnail = 'data:image/png;base64,'+msg.thumbnail;
       io.socket.get('/api/v1/ffproble');
-    });
+    }); */
   },
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
@@ -47,6 +47,11 @@ parasails.registerPage('welcome', {
         console.error(err)
       }
       
+    },
+    getData: async function () {
+      let data = await Cloud.getProgress();
+      this.listAllFilesInsert = data.listAllFilesInsert;
+      this.listAllConverted = data.listAllConverted;
     },
      
   }
