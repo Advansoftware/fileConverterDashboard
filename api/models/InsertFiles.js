@@ -53,7 +53,15 @@ module.exports = {
       type: 'number',
       example: 1
     },
-    progress: {
+    bytesUploaded: {
+      type: 'number',
+      example: 1
+    },
+    progressUpload: {
+      type: 'number',
+      example: 1
+    },
+    progressDownload: {
       type: 'number',
       example: 1
     },

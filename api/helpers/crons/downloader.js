@@ -34,25 +34,25 @@ module.exports = {
     let verify = await InsertFiles.count({status: 'downloading'});
     let verifyFFmpeg = await FileStatus.count({status:'converting'});
     let verifyConverted = await InsertFiles.count({status: 'done'});
+    let verifyUploading = await InsertFiles.count({status: 'converted'});
     let files = await sails.helpers.searchFiles.with({
       dir: 'download/',
     });
-    
-    if(verify===0 && verifyFFmpeg===0 && verifyConverted === 0 && files.length===0){
+
+    if(verify===0 && verifyFFmpeg===0 && verifyConverted === 0 && verifyUploading ===0 && files.length===0){
       
     for( let fileDonwload of await InsertFiles.find({status: 'new'}).limit(1)){
 
           let newName = fileDonwload.name.replace(/\s/g, '_');
-          //await client.cd();
           await InsertFiles.updateOne({name:fileDonwload.name, dir:  fileDonwload.dir}).set({
           status: 'downloading',
           });
 
           client.trackProgress(async(info) => {
-            let progress =  ((100 * info.bytesOverall) / fileDonwload.bytes).toFixed(2);
+            let progressDownload =  ((100 * info.bytesOverall) / fileDonwload.bytes).toFixed(2);
             await InsertFiles.updateOne({name:fileDonwload.name, dir:  fileDonwload.dir}).set({
               bytesDowloaded: info.bytesOverall,
-              progress
+              progressDownload
               });
           })
 

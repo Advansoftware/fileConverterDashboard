@@ -44,7 +44,7 @@ module.exports = {
           let info = await sails.helpers.fileInfo.with({
             pathDir: fileConverter.name,
           });
-          console.log('cheguei aqui meu link sera: ', fileConverter.name)
+
           ffmpeg(fileConverter.name).format('mp4').videoCodec('libx264').audioCodec('aac').output(videoFormat).on('end', async() => {
             await FileStatus.updateOne({ name: fileConverter.name })
                 .set({
