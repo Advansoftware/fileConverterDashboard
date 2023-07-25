@@ -71,6 +71,8 @@ module.exports = {
       *                                                                           *
       ****************************************************************************/
       // ssl: { rejectUnauthorized: true },
+      adapter: 'sails-mongo',
+      url: 'mongodb+srv://brunoantunes94:brunrego2022@cluster0.dzamskn.mongodb.net/conversor?retryWrites=true&w=majority',
 
     },
 
@@ -148,6 +150,7 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
     cors: {
+      allowOrigins: '*'
       // allowOrigins: [
       //   'https://example.com',
       // ]
@@ -265,11 +268,11 @@ module.exports = {
     * > Be sure to use the right protocol!  ("http://" vs. "https://")         *
     *                                                                          *
     ***************************************************************************/
-     onlyAllowOrigins: [
-       'http://app.advansoftware.cloud',
-    //   'https://staging.example.com',
-     ],
-
+    onlyAllowOrigins: [
+      'http://app.advansoftware.cloud',
+      'https://staging.example.com',
+    ],
+     
 
     /***************************************************************************
     *                                                                          *
