@@ -33,13 +33,14 @@ module.exports = {
   
     let verify = await InsertFiles.count({status: 'downloading'});
     let verifyFFmpeg = await FileStatus.count({status:'converting'});
-    let verifyConverted = await InsertFiles.count({status: 'done'});
-    let verifyUploading = await InsertFiles.count({status: 'converted'});
+    let verifyDone = await InsertFiles.count({status: 'done'});
+    let verifyConverted = await InsertFiles.count({status: 'converted'});
+    let verifyUploading = await InsertFiles.count({status: 'uploading'});
     let files = await sails.helpers.searchFiles.with({
       dir: 'download/',
     });
 
-    if(verify===0 && verifyFFmpeg===0 && verifyConverted === 0 && verifyUploading ===0 && files.length===0){
+    if(verify===0 && verifyFFmpeg===0 && verifyConverted === 0 && verifyUploading ===0  && verifyDone ===0 && files.length===0){
       
     for( let fileDonwload of await InsertFiles.find({status: 'new'}).limit(1)){
 
