@@ -43,6 +43,11 @@ module.exports = {
     for( let fileUpload of await InsertFiles.find({status: 'converted'}).limit(1)){
 
           let newName = fileUpload.name.replace(/\s/g, '_');
+          let moutdir = 'download/'+newName;
+          let format = moutdir.split('.');
+          let thumbnailFormat =  moutdir.name.replace(format[format.length - 1], 'png');
+          let outputFormat =  moutdir.name.replace(format[format.length - 1], 'mp4');
+
           await InsertFiles.updateOne({name:fileUpload.name, dir:  fileUpload.dir}).set({
           status: 'uploading',
           });
@@ -54,21 +59,18 @@ module.exports = {
               progressUpload
               });
           })
-          await client.uploadFrom('download/'+newName, fileUpload.dir+'/'+fileUpload.name)
+          await client.uploadFrom(outputFormat, fileUpload.dir+'/'+fileUpload.name.replace(format[format.length - 1], 'mp4'))
 
       client.trackProgress()
       
       await InsertFiles.updateOne({name:fileUpload.name, dir: fileUpload.dir}).set({
         status: 'uploaded'
       });
-      let moutdir = 'download/'+newName;
+      
       await FileStatus.updateOne({ name: moutdir }, {
         status: 'uploaded',
       });
       
-      let format = moutdir.split('.');
-      let thumbnailFormat =  moutdir.name.replace(format[format.length - 1], 'png');
-      let outputFormat =  moutdir.name.replace(format[format.length - 1], 'mp4');
 
       let filesDeletation = [thumbnailFormat,outputFormat,moutdir];
 
