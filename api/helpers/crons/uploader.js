@@ -33,7 +33,7 @@ module.exports = {
     let files = await sails.helpers.searchFiles.with({
       dir: 'download/',
     });
-    if(verify===0 && verifyFFmpeg===0 && verifyConverted === 0 && files.length > 0){
+    if(verify===0 && verifyFFmpeg===0 && verifyConverted === 0){
       await client.access({
         host: "app.advansoftware.shop",
         user: "admin",
