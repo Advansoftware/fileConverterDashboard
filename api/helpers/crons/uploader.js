@@ -38,16 +38,18 @@ module.exports = {
     let files = await sails.helpers.searchFiles.with({
       dir: 'download/',
     });
-    if(verify===0 && verifyFFmpeg===0 && verifyConverted === 0 && files.length>0){
+    if(verify===0 && verifyFFmpeg===0 && verifyConverted === 0){
       
     for( let fileUpload of await InsertFiles.find({status: 'converted'}).limit(1)){
-
+          
           let newName = fileUpload.name.replace(/\s/g, '_');
           let moutdir = 'download/'+newName;
+          
           let format = moutdir.split('.');
-          let thumbnailFormat =  moutdir.name.replace(format[format.length - 1], 'png');
-          let outputFormat =  moutdir.name.replace(format[format.length - 1], 'mp4');
-
+          
+          let thumbnailFormat =  moutdir.replace(format[format.length - 1], 'png');
+          let outputFormat =  moutdir.replace(format[format.length - 1], 'mp4');
+          
           await InsertFiles.updateOne({name:fileUpload.name, dir:  fileUpload.dir}).set({
           status: 'uploading',
           });
