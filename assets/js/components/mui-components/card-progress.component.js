@@ -36,7 +36,7 @@ parasails.registerComponent('card-progress', {
   <article class="small no-padding" v-if="thumbnail">
   <div class="progress left green"></div>
   <img  class="responsive medium" :src="thumbnail"  id="card-load"/>
-  <img  class="responsive medium" :src="thumbnail" style="opacity: .5; position: absolute;left:0;"/>
+  <img  class="responsive medium" :src="thumbnail" style="opacity: .3; position: absolute;left:0;"/>
   <div class="absolute bottom left right padding bottom-shadow white-text">
   <nav>
     <h5>Processando: {{ value }}%</h5>
