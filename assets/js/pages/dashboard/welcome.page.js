@@ -55,6 +55,7 @@ parasails.registerPage('welcome', {
       
     },
     getData: async function () {
+      let getFile = await Cloud.ffproble();
       let data = await Cloud.getProgress();
       this.listAllFilesInsert = data.listAllFilesInsert;
       this.listAllConverted = data.listAllConverted;
@@ -63,7 +64,6 @@ parasails.registerPage('welcome', {
       this.totalFiles = data.totalFiles;
       this.statisticsItems = [this.totalDownload,  this.totalUpload, this.totalFiles];
       this.activeGraph = true;
-      let getFile = await Cloud.ffproble();
       this.thumbnail = getFile.thumbnail;
       this.fileProcess = getFile.listToConverter;
       if(typeof this.fileProcess !== 'undefined'){
