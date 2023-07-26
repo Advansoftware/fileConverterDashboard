@@ -269,7 +269,7 @@ module.exports = {
     *                                                                          *
     ***************************************************************************/
     onlyAllowOrigins: [
-      'http://app.advansoftware.cloud',
+      'http://app.advansoftware.cloud:1337',
       'http://localhost:1337',
    //   'https://staging.example.com',
     ],
@@ -393,7 +393,7 @@ module.exports = {
   *                                                                         *
   ***************************************************************************/
   custom: {
-    baseUrl: 'http://app.advansoftware.cloud',
+    baseUrl: 'http://app.advansoftware.cloud:1337',
     internalEmailAddress: 'support@example.com',
 
     // sendgridSecret: 'SG.fake.3e0Bn0qSQVnwb1E4qNPz9JZP5vLZYqjh7sn8S93oSHU',
