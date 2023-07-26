@@ -67,7 +67,7 @@ parasails.registerPage('welcome', {
       this.thumbnail = getFile.thumbnail;
       this.fileProcess = getFile.listToConverter;
       if(typeof this.fileProcess !== 'undefined'){
-        this.progressConversion = (this.fileProcess.progress/100).toFixed(3)
+        this.progressConversion = this.fileProcess.progress;
       }
       setTimeout(() => this.getData(), 6000)
     },
