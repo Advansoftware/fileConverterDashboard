@@ -17,7 +17,7 @@ parasails.registerComponent('chart', {
   props: [
     'syncing',
     'type',
-    'data',
+    'dataStatus',
     'labels',
   ],
 
@@ -27,6 +27,8 @@ parasails.registerComponent('chart', {
   data: function (){
     return {
       graphType: this.type ? this.type : 'bar',
+      id: 0,
+      ctx1: '',
     };
   },
 
@@ -34,7 +36,7 @@ parasails.registerComponent('chart', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
-    <canvas id="chart-line" style="min-height: 300px; height: 100%; width:100%;">
+    <canvas :id="id" style="min-height: 300px; height: 100%; width:100%;">
     </canvas>
   `,
 
@@ -43,15 +45,29 @@ parasails.registerComponent('chart', {
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function() {
     //…
+    this.id = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  );
+  
   },
   mounted: async function(){
-    //…
-    this.generateGraph();
+    if(this.syncing){
+      this.generateGraph();
+    }
+
   },
   beforeDestroy: function() {
     //…
+    this.ctx1.destroy();
   },
-
+  watch: {
+    syncing:{
+      handler(){
+        this.generateGraph();
+      },
+      deep: true,
+    },
+  },
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
@@ -59,14 +75,14 @@ parasails.registerComponent('chart', {
 
     generateGraph: function() {
 
-      var ctx1 = document.getElementById('chart-line').getContext('2d');
+      let ctx1 = document.getElementById(this.id).getContext('2d');
 
       var gradientStroke1 = ctx1.createLinearGradient(0, 230, 0, 50);
 
       gradientStroke1.addColorStop(1, 'rgba(94, 114, 228, 0.2)');
       gradientStroke1.addColorStop(0.2, 'rgba(94, 114, 228, 0.0)');
       gradientStroke1.addColorStop(0, 'rgba(94, 114, 228, 0)');
-      new Chart(ctx1, {
+      this.ctx1 = new Chart(ctx1, {
         type: this.graphType,
         data: {
           labels: this.labels,
@@ -77,7 +93,7 @@ parasails.registerComponent('chart', {
             backgroundColor: gradientStroke1,
             borderWidth: 3,
             fill: true,
-            data: this.data,
+            data: this.dataStatus,
             maxBarThickness: 6
 
           }],
@@ -138,6 +154,7 @@ parasails.registerComponent('chart', {
           },
         },
       });
+      
     },
   }
 });

@@ -22,22 +22,20 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     try{
-      let thumbFile = '';
-      let generateThumbnail = '';
-      let listToConverter = await FileStatus.findOne({ status: 'converting' });
       let listAllFilesInsert = await InsertFiles.find();
       let listAllConverted = await FileStatus.find();
-      let listDownload = await InsertFiles.findOne({ status: 'downloading' });
-      let listUpload = await InsertFiles.findOne({ status: 'uploading' });
+      let totalDownload = await InsertFiles.count({ status: 'new' });
+      let totalUpload = await InsertFiles.count({ status: 'uploaded' });
+      let totalFiles = await InsertFiles.count({});
       /* if(listToConverter){
          thumbFile = listToConverter.dir + listToConverter.thumbnail;
           generateThumbnail = await fs.readFileSync(thumbFile, 'base64');
       } */
       return exits.success({
-       /*  listToConverter,
-        listDownload, 
-        listUpload,  */
-        /* generateThumbnail,  */
+        totalDownload,
+        totalUpload, 
+        totalFiles, 
+        statisticsItems: [totalDownload,totalUpload,totalFiles],
         listAllFilesInsert, 
         listAllConverted
       });

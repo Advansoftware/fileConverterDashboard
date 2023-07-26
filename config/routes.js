@@ -48,7 +48,7 @@ module.exports.routes = {
   'GET /api/v1/portal/get-list': { action: 'portal/get-list' },
   'PUT /api/v1/portal/active': { action: 'portal/delete' },
   'GET /api/v1/account/get-me': { action: 'account/get-me' },
-  'GET /api/v1/ffproble': { action: 'ffproble', hasSocketFeatures: true},
+  'GET /api/v1/ffproble': { action: 'ffproble'},
   'GET /api/v1/driveconfig': { action: 'driveconfig' },
   'POST /api/v1/active-process': { action: 'active-process' },
   

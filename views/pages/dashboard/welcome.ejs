@@ -1,33 +1,24 @@
 <app id="welcome">
-  <grid container spacing="2">
-    <grid item>
-      <switch-button
-      :value-var="modal"
-      :value-var.sync="modal"
-      name="teste"
-      >
-      </switch-button>
+  <grid container spacing="2"> 
+    <grid item sm="12">
+      <ajax-button @click="startConversion" :syncing="sync">Iniciar Conversão</ajax-button>
     </grid>
-   
-      
-    <grid item sm="12" md="6" lg="12">
+    <grid item sm="12" md="6" lg="6">
       <chart
-        :labels="['eu', 'ia', 'lhe','chamar']"
-        :data="[5,25,10,40]"
+        :labels="['Total de Downloads', 'Tatal Enviado', 'Total de Arquivos']"
+        :data-status="statisticsItems"
+        :syncing="activeGraph"
       ></chart>
     </grid>
-    <grid item sm="12" md="12" lg="6">
-        <card title="Teste card">
-          testando Card ok
-        </card>
+    <grid item sm="12" md="6" lg="6">
+      <card-progress
+      :value="progressConversion"
+      :thumbnail="thumbnail"
+      ></card-progress>
     </grid>
+  
     <grid item sm="12" md="12" lg="6">
-        <card title="Teste card">
-          testando Card ok
-        </card>
-    </grid>
-    <grid item sm="12" md="12" lg="6">
-      <card title="Insert File">
+      <card title="Arquivos do Servidor">
         <table>
           <th>
             Nome
@@ -65,7 +56,7 @@
       </card>
     </grid>
     <grid item sm="12" md="12" lg="6">
-      <card title="All Converted">
+      <card title="Lista de Conversão">
       <table>
         <th>
           Nome
@@ -99,7 +90,7 @@
   <toast :active="modal" color="primary" :active.sync="modal">
     Testando
   </toast>
-  <button @click="startConversion" :disabled="sync">Iniciar conversão</button>
+  
  <!-- <input type="file" webkitdirectory directory></input> -->
   
 </app>

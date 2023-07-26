@@ -1,4 +1,3 @@
-const ffmpeg = require('fluent-ffmpeg');
 const fs = require('fs');
 module.exports = {
 
@@ -28,7 +27,7 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    let secret = this.req.param('secret');
+    let thumbnail = '';
   try{
     let listToConverter = await FileStatus.findOne({ status: 'converting' });
     
@@ -36,15 +35,16 @@ module.exports = {
       let thumbFile = listToConverter.dir + listToConverter.thumbnail;
       let generateThumbnail = await fs.readFileSync(thumbFile, 'base64');
   
-      FileStatus.subscribe(this.req, [listToConverter.id]);
+     /*  FileStatus.subscribe(this.req, [listToConverter.id]);
       FileStatus.publish(([listToConverter.id]), {
         progress: listToConverter.progress,
         thumbnail: generateThumbnail,
-      })
+      }) */
+      thumbnail = 'data:image/png;base64,'+generateThumbnail;
     }
    
    
-    exits.success(FileStatus);
+    exits.success({listToConverter, thumbnail});
   }catch(err){
     console.error(err)
   }

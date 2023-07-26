@@ -9,7 +9,13 @@ parasails.registerPage('welcome', {
     progressConversion: 0,
     listAllFilesInsert: [],
     listAllConverted: [],
+    totalDownload: 0,
+    totalUpload: 0,
+    totalFiles: 0,
+    statisticsItems: [],
+    fileProcess: [],
     thumbnail: '',
+    activeGraph: false,
     sync:false,
   },
 
@@ -41,7 +47,6 @@ parasails.registerPage('welcome', {
         if(data){
           this.thumbnailRequest = data;
         }
-        console.log(this.FileStatus)
         this.sync = false;
         thie.getData();
       }catch(err){
@@ -53,6 +58,17 @@ parasails.registerPage('welcome', {
       let data = await Cloud.getProgress();
       this.listAllFilesInsert = data.listAllFilesInsert;
       this.listAllConverted = data.listAllConverted;
+      this.totalDownload = data.totalDownload;
+      this.totalUpload = data.totalUpload;
+      this.totalFiles = data.totalFiles;
+      this.statisticsItems = [this.totalDownload,  this.totalUpload, this.totalFiles];
+      this.activeGraph = true;
+      let getFile = await Cloud.ffproble();
+      this.thumbnail = getFile.thumbnail;
+      this.fileProcess = getFile.listToConverter;
+      if(typeof this.fileProcess !== 'undefined'){
+        this.progressConversion = (this.fileProcess.progress/100).toFixed(3)
+      }
       setTimeout(() => this.getData(), 6000)
     },
      
