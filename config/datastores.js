@@ -51,7 +51,7 @@ module.exports.datastores = {
     // adapter: 'sails-mysql',
     // url: 'mysql://user:password@host:port/database',
     adapter: 'sails-mongo',
-    url: 'mongodb+srv://brunoantunes94:brunrego2022@cluster0.dzamskn.mongodb.net/conversor?retryWrites=true&w=majority',
+    url: 'mongodb://app.advansoftware.cloud:27017//conversor',
   },
 
 
