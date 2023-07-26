@@ -72,7 +72,7 @@ module.exports = {
       ****************************************************************************/
       // ssl: { rejectUnauthorized: true },
       adapter: 'sails-mongo',
-      url: 'mongodb://app.advansoftware.cloud:27017//conversor',
+      url: 'mongodb:/localhost:27017/conversor',
     },
 
   },
